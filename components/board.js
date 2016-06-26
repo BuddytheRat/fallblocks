@@ -6,7 +6,7 @@ var Board = {
 
 	new_matrix: function () {
 		this.board_matrix = new Array(this.BOARD_HEIGHT);
-		for (var y = 0; y < this.BOARD_HEIGHT; y++;) {
+		for (var y = 0; y < this.BOARD_HEIGHT; y++) {
 			this.board_matrix[y] = new Array(this.BOARD_WIDTH);
 		}
 	},
