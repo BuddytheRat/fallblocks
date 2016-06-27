@@ -14,7 +14,7 @@ var Board = {
 		//return true if tile at [x, y] is occupied
 	},
 	unoccupied: function(x, y) {
-		return !occupied(x, y);
+		return !this.occupied(x, y);
 	},
 	clear_line: function(y) {
 		//magic

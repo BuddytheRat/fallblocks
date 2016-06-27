@@ -19,11 +19,11 @@ var mainState = {
 			z: { shape: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red' }
 		};
 		
-		Block.set_shape(blocks.t.shape);
-		Block.create_block(3, 3);
+		var zblock = new BlockManager.Block(blocks.z.shape);
+		zblock.create_block(3, 3);
 
-		Block.set_shape(blocks.l.shape);
-		Block.create_block(7, 5);
+		var tblock = new BlockManager.Block(blocks.t.shape);
+		tblock.create_block(5, 7);
 	},
 
 	update: function() {
