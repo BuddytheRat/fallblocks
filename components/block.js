@@ -2,11 +2,11 @@ var BlockManager = (function () {
 	//Then God said "Let there be straight pieces",
 	//and there were straight pieces.
 
-	var pub = {};
+	var exports = {};
 
 	//Public//
 
-	pub.new_block = function (shape) {
+	exports.new_block = function (shape) {
 		return new Block(shape);
 	}
 
@@ -16,34 +16,67 @@ var BlockManager = (function () {
 	var Block = function(shape) {
 		this.shape = shape;
 		this.dir = 0;
+		this.origin_x = this.origin_y = 0;
 
 		//BLOCK AI//
 		this.speak = function() {
-			window.alert("I am the " + this.shape + " block!");
-		};
-
-		this.set_shape = function(shape) {
-			this.shape = shape;
+			window.alert("Hello! I am a block!");
 		};
 
 		//MOVEMENT//
-		this.rotate = function(i) {
-			//magical fairy dust
+		this.rotate_cw = function() {
+			this.dir += 1;
+			if (this.dir > 3) { this.dir = 0 };
+			this.new_pos(this.origin_x, this.origin_y);
+		};
+		this.rotate_ccw = function() {
+			this.dir -= 1;
+			if (this.dir < 0) { this.dir = 3 };
+			this.new_pos(this.origin_x, this.origin_y);
 		};
 		this.move = function(x, y) {
-			//more magic
-			this.group.x += tile_x(x);
-			this.group.y += tile_y(y);
+			//moves block relative to current position
+			this.new_pos(this.origin_x + x, this.origin_y + y);
 		};
 
+		//POSITIONING//
+		this.new_pos = function(x, y) {
+			//set block coordinates
+			this.origin_x = x;
+			this.origin_y = y;
+			this.eachblock(x, y, this.place_tile.bind(this));
+		};
+		this.place_tile = function(x, y, rx, ry, i) {
+			//set tile coordinates
+			this.group.children[i].x = tile_x(x+rx);
+			this.group.children[i].y = tile_y(y+ry);
+		};
+
+		//CREATION//
+		this.create_block = function (x, y) {
+			//create group and populate with tiles
+			this.group = game.add.group();
+			this.eachblock(x, y, this.create_tile.bind(this));
+			this.new_pos(x, y);
+		};
+		this.create_tile = function(x, y, rx, ry) {
+			//create tile sprite
+			var canvasBlock = new Phaser.BitmapData(game, 'block', TILE_WIDTH, TILE_HEIGHT);
+			canvasBlock.fill(55, 55, 100);
+			this.group.create(0, 0, canvasBlock);
+		};
+
+		//HELPER//
 		//run a function on each tile in the block.
 		this.eachblock = function(x, y, fn) {
-			var bit
+			var bit;
 			var blocks = this.shape[this.dir];
 			var rx = ry = 0;
+			var i = 0;
 			for (bit = 0x8000; bit > 0; bit = bit >> 1) {
 				if (blocks & bit) {
-					fn(x, y, rx, ry);
+					fn(x, y, rx, ry, i);
+					i++;
 				}
 				if (++rx == 4) {
 					rx = 0;
@@ -51,16 +84,7 @@ var BlockManager = (function () {
 				}
 			}
 		};
-		this.create_tile = function(x, y, rx, ry) {
-			var canvasBlock = new Phaser.BitmapData(game, 'block', TILE_WIDTH, TILE_HEIGHT);
-			canvasBlock.fill(55, 55, 100);
-			this.group.create(tile_x(x+rx), tile_y(y+ry), canvasBlock);
-		};
-		this.create_block = function (x, y) {
-			this.group = game.add.group();
-			this.eachblock(x, y, this.create_tile.bind(this));
-		};
 	};
 
-	return pub;
+	return exports;
 }());

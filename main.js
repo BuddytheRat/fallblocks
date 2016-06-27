@@ -21,6 +21,10 @@ var mainState = {
 
 		this.zblock = BlockManager.new_block(blocks.z.shape);
 		this.zblock.create_block(3, 3);
+		this.zblock.new_pos(5, 5);
+		this.zblock.rotate_ccw();
+		this.zblock.move(0, 1);
+
 	},
 
 	update: function() {

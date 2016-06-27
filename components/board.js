@@ -1,8 +1,21 @@
 var Board = (function () {
+	//
 
 	var pub = {};
 
-	//Private
+	//Public//
+
+	pub.occupied = function(x, y) {
+		//return true if tile at [x, y] is occupied
+	};
+	pub.unoccupied = function(x, y) {
+		return !this.occupied(x, y);
+	};
+	pub.clear_line = function(y) {
+		//magic
+	};
+
+	//Private//
 
 	var BOARD_WIDTH = 10,
 		BOARD_HEIGHT = 20,
@@ -15,16 +28,6 @@ var Board = (function () {
 		}
 	};
 
-	//Public
-
-	pub.occupied = function(x, y) {
-		//return true if tile at [x, y] is occupied
-	};
-	pub.unoccupied = function(x, y) {
-		return !this.occupied(x, y);
-	};
-	pub.clear_line = function(y) {
-		//magic
-	};
+	return pub;
 
 }());
