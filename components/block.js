@@ -1,8 +1,19 @@
-var BlockManager = {
-	//All hail BlockManager, messenger of the Tetris gods, bringer of the I block.
+var BlockManager = (function () {
+	//Then God said "Let there be straight pieces",
+	//and there were straight pieces.
+
+	var pub = {};
+
+	//Public//
+
+	pub.new_block = function (shape) {
+		return new Block(shape);
+	}
+
+	//Private//
 
 	//Block object for instantiating.
-	Block: function(shape) {
+	var Block = function(shape) {
 		this.shape = shape;
 		this.dir = 0;
 
@@ -21,6 +32,8 @@ var BlockManager = {
 		};
 		this.move = function(x, y) {
 			//more magic
+			this.group.x += tile_x(x);
+			this.group.y += tile_y(y);
 		};
 
 		//run a function on each tile in the block.
@@ -41,10 +54,13 @@ var BlockManager = {
 		this.create_tile = function(x, y, rx, ry) {
 			var canvasBlock = new Phaser.BitmapData(game, 'block', TILE_WIDTH, TILE_HEIGHT);
 			canvasBlock.fill(55, 55, 100);
-			game.add.sprite(tile_x(x+rx), tile_y(y+ry), canvasBlock);
+			this.group.create(tile_x(x+rx), tile_y(y+ry), canvasBlock);
 		};
 		this.create_block = function (x, y) {
+			this.group = game.add.group();
 			this.eachblock(x, y, this.create_tile.bind(this));
 		};
-	},
-};
+	};
+
+	return pub;
+}());

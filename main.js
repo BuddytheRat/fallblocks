@@ -18,12 +18,9 @@ var mainState = {
 			t: { shape: [0x0E40, 0x4C40, 0x4E00, 0x4640], color: 'purple' },
 			z: { shape: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red' }
 		};
-		
-		var zblock = new BlockManager.Block(blocks.z.shape);
-		zblock.create_block(3, 3);
 
-		var tblock = new BlockManager.Block(blocks.t.shape);
-		tblock.create_block(5, 7);
+		this.zblock = BlockManager.new_block(blocks.z.shape);
+		this.zblock.create_block(3, 3);
 	},
 
 	update: function() {
