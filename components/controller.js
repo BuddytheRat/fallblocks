@@ -7,32 +7,17 @@ var Controller = (function() {
 	exports.keyboard = {};
 
 	exports.init = function() {
-		var downAndChecked_reset = game.time.events.loop(1, reset_pressed);
+		var timeout_clock = game.time.events.loop(1, update_timeouts);
 	};
 
-	exports.key_down = function(action) {
+	exports.key_down = function(action, timeout = 0) {
 		for (key in exports.keyboard[action]) {
-			if (exports.keyboard[action][key].isDown) {
+			if (exports.keyboard[action][key].isDown && timeouts[action] == 0) {
+				timeouts[action] = timeout;
 				return true;
 			}
 		}
 		return false;
-	};
-
-	exports.key_down_once = function(action) {
-		/* Return true if key is down, 
-		and then return false untill key 
-		is released and pressed again. */
-
-		/* NOTE: Should impliment this 
-		into key_down as an optional 
-		timeout argument instead. */ 
-		if (downAndChecked.indexOf(action) >= 0) {
-			return false;
-		} else if (exports.key_down(action)) {
-			downAndChecked.push(action);
-			return true;
-		}
 	};
 
 	exports.add_keys = function(obj) {
@@ -44,18 +29,21 @@ var Controller = (function() {
 				exports.keyboard[action].push(
 					game.input.keyboard.addKey(Phaser.KeyCode[obj[action][key]])
 				);
+					timeouts[action] = 0;
 			}
 		}
 	};
 
 	//PRIVATE//
 
-	var downAndChecked = [];
+	var timeouts = {};
 
-	var reset_pressed = function () {
-		for (action in downAndChecked) {
-			if (!exports.key_down(downAndChecked[action])) {
-				downAndChecked.splice(action, 1);
+	var update_timeouts = function () {
+		for (action in timeouts) {
+			if (timeouts[action] > 0) {
+				timeouts[action]--;
+			} else {
+				timeouts[action] == 0;
 			}
 		}
 	}

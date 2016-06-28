@@ -30,7 +30,7 @@ var mainState = {
 	update: function() {
 		//60 fps
 		//game logic here
-		if (Controller.key_down_once('up')) {
+		if (Controller.key_down('up', 10)) {
 			this.randomblock.rotate_cw();
 		}
 	},
