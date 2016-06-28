@@ -8,6 +8,7 @@ var Controller = (function() {
 
 	exports.init = function() {
 		var timeout_clock = game.time.events.loop(1, update_timeouts);
+		exports.add_keys(KEYS);
 	};
 
 	exports.key_down = function(action, timeout = 0) {
@@ -29,7 +30,7 @@ var Controller = (function() {
 				exports.keyboard[action].push(
 					game.input.keyboard.addKey(Phaser.KeyCode[obj[action][key]])
 				);
-					timeouts[action] = 0;
+				timeouts[action] = 0;
 			}
 		}
 	};

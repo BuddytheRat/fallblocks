@@ -8,8 +8,9 @@ var TILE_WIDTH        = 16,
 	BOARD_OFFSET_X    = 10,
 	BOARD_OFFSET_Y    = 10,
 	KEYS              = {
-		'up'   : ['UP', 'W'],
-		'down' : ['DOWN', 'S'],
-		'left' : ['LEFT', 'A'],
-		'right': ['RIGHT', 'D'],
+		'rotate_cw' : ['UP', 'W', 'X'],
+		'rotate_ccw': ['DOWN', 'Z'],
+		'drop'      : ['SPACE'],
+		'left'      : ['LEFT', 'A'],
+		'right'     : ['RIGHT', 'D'],
 	};

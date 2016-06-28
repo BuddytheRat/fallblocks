@@ -10,14 +10,38 @@ var Board = (function () {
 		game.add.sprite(BOARD_OFFSET_X, BOARD_OFFSET_Y, border);
 	}
 
-	exports.occupied = function(x, y) {
-		//return true if tile at [x, y] is occupied
+	exports.occupied = function(coords, offset = [0, 0]) {
+		//check list of coords for collision.
+		for (var xy in coords) {
+			xy[0] += offset[0];
+			xy[1] += offset[1];
+			
+			if (this.board_matrix[xy[0]][xy[1]]) { //Blocks
+				return true;
+			} else if (xy[1] > BOARD_TILE_HEIGHT) {	//Floor
+				return true;
+			} else if (xy[0] < 0 || xy[1] > BOARD_TILE_WIDTH) { //Walls
+				return true;
+			}
+		}
+		return false;
 	};
-	exports.unoccupied = function(x, y) {
-		return !this.occupied(x, y);
+	exports.unoccupied = function(coords) {
+		return !this.occupied(coords);
 	};
-	exports.clear_line = function(y) {
-		//magic
+	exports.place_block = function(coords) {
+		for (var xy in coords) {
+			this.board_matrix[xy[0]][xy[1]] = 1;
+		}
+	}
+
+	exports.clear_lines = function(y, num) {
+		// y is top most row to clear,
+		// num is number of rows.
+		this.board_matrix.splice[y, num];
+		for (var i = 0; i < num; i++) {
+			this.board_matrix.unshift(new Array(this.BOARD_WIDTH));
+		}
 	};
 
 	//Private//
