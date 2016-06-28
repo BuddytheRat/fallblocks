@@ -6,11 +6,46 @@ var BlockManager = (function () {
 
 	//Public//
 
+	exports.init = function () {
+		new_pool();
+	};
+
 	exports.new_block = function (shape) {
-		return new Block(shape);
-	}
+		var block = new Block(BLOCKS[get_next_block()].shape);
+		if (block_pool.length == 0) { new_pool(); }
+		block.create_block();
+		return block;
+	};
 
 	//Private//
+
+	var BLOCKS = {
+		i: { shape: [0x0F00, 0x2222, 0x00F0, 0x4444], color: 'cyan' },
+		j: { shape: [0x44C0, 0x8E00, 0x6440, 0x0E20], color: 'blue' },
+		l: { shape: [0x4460, 0x0E80, 0xC440, 0x2E00], color: 'orange' },
+		o: { shape: [0xCC00, 0xCC00, 0xCC00, 0xCC00], color: 'yellow' },
+		s: { shape: [0x06C0, 0x8C40, 0x6C00, 0x4620], color: 'green' },
+		t: { shape: [0x0E40, 0x4C40, 0x4E00, 0x4640], color: 'purple' },
+		z: { shape: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red' }
+	};
+	var block_pool = [];
+
+	//BLOCK POOL
+	var new_pool = function () {
+		//create list of keys for BLOCKS object.
+		for (var block in BLOCKS) {
+			for (var i = 0; i <= 3; i++) {
+				block_pool.push(block);
+			}
+		};
+	};
+
+	var get_next_block = function () {
+		//get random block from pool.
+		var rand = Math.floor(Math.random() * block_pool.length - 1);
+		return block_pool.splice(rand, 1);
+	};
+
 
 	//Block object for instantiating.
 	var Block = function(shape) {
