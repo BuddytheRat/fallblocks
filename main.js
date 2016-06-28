@@ -1,4 +1,11 @@
-var TILE_WIDTH = TILE_HEIGHT = 16;
+var TILE_WIDTH        = 16,
+	TILE_HEIGHT       = 16,
+	BOARD_TILE_WIDTH  = 10,
+	BOARD_TILE_HEIGHT = 20,
+	BOARD_WIDTH       = BOARD_TILE_WIDTH * TILE_WIDTH,
+	BOARD_HEIGHT      = BOARD_TILE_HEIGHT * TILE_HEIGHT,
+	BOARD_OFFSET_X    = 10,
+	BOARD_OFFSET_Y    = 10;
 
 var mainState = {
 	preload: function() {
@@ -19,12 +26,16 @@ var mainState = {
 			z: { shape: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red' }
 		};
 
-		this.zblock = BlockManager.new_block(blocks.z.shape);
-		this.zblock.create_block(3, 3);
-		this.zblock.new_pos(5, 5);
-		this.zblock.rotate_ccw();
-		this.zblock.move(0, 1);
+		Board.init();
+		this.zblock = BlockManager.new_block(blocks.i.shape);
+		this.zblock.create_block();
+		this.zblock.new_pos(4, 5);
 
+
+		var ticktock = function () {
+			this.zblock.rotate_cw();
+		};
+		game.time.events.loop(Phaser.Timer.SECOND, ticktock, this);
 	},
 
 	update: function() {
@@ -34,7 +45,7 @@ var mainState = {
 };
 
 // Initialize Phaser
-var game = new Phaser.Game(200, 340, Phaser.AUTO, 'game');
+var game = new Phaser.Game(400, 340, Phaser.AUTO, 'game');
 // Add 'mainState' and call it 'main'
 game.state.add('main', mainState);
 // Start the state. (Start the game.)

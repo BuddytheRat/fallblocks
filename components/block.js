@@ -66,7 +66,7 @@ var BlockManager = (function () {
 			this.group.create(0, 0, canvasBlock);
 		};
 
-		//HELPER//
+		//HELPERS//
 		//run a function on each tile in the block.
 		this.eachblock = function(x, y, fn) {
 			var bit;
