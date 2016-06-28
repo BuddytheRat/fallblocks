@@ -8,8 +8,6 @@ var Board = (function () {
 		border = new Phaser.BitmapData(game, 'border', BOARD_WIDTH, BOARD_HEIGHT);
 		border.fill(180, 180, 230);
 		game.add.sprite(BOARD_OFFSET_X, BOARD_OFFSET_Y, border);
-
-		draw_grid();
 	}
 
 	exports.occupied = function(x, y) {

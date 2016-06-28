@@ -8,6 +8,7 @@ var mainState = {
 		game.stage.backgroundColor = "#667";
 
 		Board.init();
+		Controller.init();
 		Controller.add_keys(KEYS);
 		BlockManager.init();
 
@@ -29,6 +30,9 @@ var mainState = {
 	update: function() {
 		//60 fps
 		//game logic here
+		if (Controller.key_down_once('up')) {
+			this.randomblock.rotate_cw();
+		}
 	},
 };
 
