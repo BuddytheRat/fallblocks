@@ -58,6 +58,16 @@ var BlockManager = (function () {
 			window.alert("Hello! I am a block!");
 		};
 
+		this.tile_coords = function() {
+			var x = this.origin_x;
+			var y = this.origin_y;
+			var tile_coords_arr = [];
+			this.eachblock(x, y, function(x, y, rx, ry, i) {
+				tile_coords_arr.push([this.origin_x + rx, this.origin_y + ry]);
+			}.bind(this));
+			return tile_coords_arr;
+		};
+
 		//MOVEMENT//
 		this.rotate_cw = function() {
 			this.dir += 1;
@@ -94,7 +104,7 @@ var BlockManager = (function () {
 			this.eachblock(x, y, this.create_tile.bind(this));
 			this.new_pos(x, y);
 		};
-		this.create_tile = function(x, y, rx, ry) {
+		this.create_tile = function() {
 			//create tile sprite
 			var canvasBlock = new Phaser.BitmapData(game, 'block', TILE_WIDTH, TILE_HEIGHT);
 			canvasBlock.fill(55, 55, 100);
@@ -119,6 +129,7 @@ var BlockManager = (function () {
 				}
 			}
 		};
+
 	};
 
 	return exports;

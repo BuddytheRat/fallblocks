@@ -8,19 +8,20 @@ var Board = (function () {
 		border = new Phaser.BitmapData(game, 'border', BOARD_WIDTH, BOARD_HEIGHT);
 		border.fill(180, 180, 230);
 		game.add.sprite(BOARD_OFFSET_X, BOARD_OFFSET_Y, border);
+		new_matrix();
 	}
 
 	exports.occupied = function(coords, offset = [0, 0]) {
 		//check list of coords for collision.
 		for (var xy in coords) {
-			xy[0] += offset[0];
-			xy[1] += offset[1];
+			coords[xy][0] += offset[0];
+			coords[xy][1] += offset[1];
 			
-			if (this.board_matrix[xy[0]][xy[1]]) { //Blocks
+			if (board_matrix[coords[xy][0]][coords[xy][1]]) { //Blocks
 				return true;
-			} else if (xy[1] > BOARD_TILE_HEIGHT) {	//Floor
+			} else if (coords[xy][1] > BOARD_TILE_HEIGHT) {	//Floor
 				return true;
-			} else if (xy[0] < 0 || xy[1] > BOARD_TILE_WIDTH) { //Walls
+			} else if (coords[xy][0] < 0 || coords[xy][1] > BOARD_TILE_WIDTH) { //Walls
 				return true;
 			}
 		}
@@ -31,25 +32,27 @@ var Board = (function () {
 	};
 	exports.place_block = function(coords) {
 		for (var xy in coords) {
-			this.board_matrix[xy[0]][xy[1]] = 1;
+			board_matrix[coords[xy][0]][coords[xy][1]] = 1;
 		}
 	}
 
 	exports.clear_lines = function(y, num) {
 		// y is top most row to clear,
 		// num is number of rows.
-		this.board_matrix.splice[y, num];
+		board_matrix.splice[y, num];
 		for (var i = 0; i < num; i++) {
-			this.board_matrix.unshift(new Array(this.BOARD_WIDTH));
+			board_matrix.unshift(new Array(this.BOARD_WIDTH));
 		}
 	};
 
 	//Private//
 
+	var board_matrix = [];
+
 	var new_matrix = function () {
-		this.board_matrix = new Array(this.BOARD_HEIGHT);
+		board_matrix = new Array(this.BOARD_HEIGHT);
 		for (var y = 0; y < this.BOARD_HEIGHT; y++) {
-			this.board_matrix[y] = new Array(this.BOARD_WIDTH);
+			board_matrix[y] = new Array(this.BOARD_WIDTH);
 		}
 	};
 
