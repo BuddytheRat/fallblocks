@@ -58,13 +58,16 @@ var BlockManager = (function () {
 			window.alert("Hello! I am a block!");
 		};
 
-		this.tile_coords = function() {
+		this.tile_coords = function(dir = 0) {
 			var x = this.origin_x;
 			var y = this.origin_y;
 			var tile_coords_arr = [];
-			this.eachblock(x, y, function(x, y, rx, ry, i) {
-				tile_coords_arr.push([this.origin_x + rx, this.origin_y + ry]);
-			}.bind(this));
+			for (tile in this.group.children) {
+				tile_coords_arr.push([
+					this.group.children[tile].tile_x, 
+					this.group.children[tile].tile_y
+				]);
+			}
 			return tile_coords_arr;
 		};
 
@@ -93,8 +96,10 @@ var BlockManager = (function () {
 		};
 		this.place_tile = function(x, y, rx, ry, i) {
 			//set tile coordinates
-			this.group.children[i].x = tile_x(x+rx);
-			this.group.children[i].y = tile_y(y+ry);
+			this.group.children[i].x = tile_pos_x(x+rx);
+			this.group.children[i].y = tile_pos_y(y+ry);
+			this.group.children[i].tile_x = x + rx;
+			this.group.children[i].tile_y = y + ry;
 		};
 
 		//CREATION//
@@ -108,7 +113,10 @@ var BlockManager = (function () {
 			//create tile sprite
 			var canvasBlock = new Phaser.BitmapData(game, 'block', TILE_WIDTH, TILE_HEIGHT);
 			canvasBlock.fill(55, 55, 100);
-			this.group.create(0, 0, canvasBlock);
+			var tile = game.add.sprite(0, 0, canvasBlock);
+			tile.tile_x = 0;
+			tile.tile_y = 0;
+			this.group.add(tile);
 		};
 
 		//HELPERS//

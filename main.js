@@ -35,20 +35,15 @@ var mainState = {
 		//60 fps
 		//game logic here
 		if (Controller.key_down('rotate_cw', 10)) {
-			this.block.rotate_cw();
+			if (this.block.tile_coords(1))
+			this.block.rotate_cw(); 
 		}
-		if (Controller.key_down('rotate_ccw', 10)) {
-			this.block.rotate_ccw();
-		}
+		if (Controller.key_down('rotate_ccw', 10)) { this.block.rotate_ccw(); }
 		if (Controller.key_down('left', 5)) {
-			if (Board.unoccupied(this.block.tile_coords(), [-1, 0])) {
-				this.block.move(-1, 0);
-			}
+			if (Board.unoccupied(this.block.tile_coords(), [-1, 0])) { this.block.move(-1, 0); }
 		}
 		if (Controller.key_down('right', 5)) {
-			if (Board.unoccupied(this.block.tile_coords(), [1, 0])) {
-				this.block.move(1, 0);
-			}
+			if (Board.unoccupied(this.block.tile_coords(), [1, 0])) { this.block.move(1, 0); }
 		}
 	},
 };

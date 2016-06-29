@@ -4,35 +4,37 @@ var Board = (function () {
 	
 	//Public//
 
+	
 	exports.init = function() {
 		border = new Phaser.BitmapData(game, 'border', BOARD_WIDTH, BOARD_HEIGHT);
 		border.fill(180, 180, 230);
 		game.add.sprite(BOARD_OFFSET_X, BOARD_OFFSET_Y, border);
 		new_matrix();
+		draw_grid();
 	}
 
-	exports.occupied = function(coords, offset = [0, 0]) {
+	exports.occupied = function (tiles, offset = [0, 0, 0]) {
 		//check list of coords for collision.
-		for (var xy in coords) {
-			coords[xy][0] += offset[0];
-			coords[xy][1] += offset[1];
-			
-			if (board_matrix[coords[xy][0]][coords[xy][1]]) { //Blocks
+		for (var xy in tiles) {
+			tiles[xy][0] += offset[0];
+			tiles[xy][1] += offset[1];
+			if (tiles[xy][1] > BOARD_TILE_HEIGHT) { //Floor
 				return true;
-			} else if (coords[xy][1] > BOARD_TILE_HEIGHT) {	//Floor
+			} else if (tiles[xy][0] < 0 || tiles[xy][0] > BOARD_TILE_WIDTH - 1) { //Walls
 				return true;
-			} else if (coords[xy][0] < 0 || coords[xy][1] > BOARD_TILE_WIDTH) { //Walls
+			} else if (board_matrix[tiles[xy][1]][tiles[xy][0]] == 1) { //Blocks
 				return true;
 			}
 		}
 		return false;
+	}
+	exports.unoccupied = function(tiles, offset = [0, 0]) {
+		return !this.occupied(tiles, offset);
 	};
-	exports.unoccupied = function(coords) {
-		return !this.occupied(coords);
-	};
-	exports.place_block = function(coords) {
-		for (var xy in coords) {
-			board_matrix[coords[xy][0]][coords[xy][1]] = 1;
+	exports.place_block = function(tiles) {
+		//swap coords here
+		for (var xy in tiles) {
+			board_matrix[tiles[xy][1]][tiles[xy][0]] = 1;
 		}
 	}
 
@@ -50,9 +52,9 @@ var Board = (function () {
 	var board_matrix = [];
 
 	var new_matrix = function () {
-		board_matrix = new Array(this.BOARD_HEIGHT);
-		for (var y = 0; y < this.BOARD_HEIGHT; y++) {
-			board_matrix[y] = new Array(this.BOARD_WIDTH);
+		board_matrix = new Array(BOARD_TILE_HEIGHT);
+		for (var y = 0; y < BOARD_TILE_HEIGHT; y++) {
+			board_matrix[y] = new Array(BOARD_TILE_WIDTH);
 		}
 	};
 
