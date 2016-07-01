@@ -21,6 +21,10 @@ var Controller = (function() {
 		return false;
 	};
 
+	exports.set_timeout = function(action, timeout) {
+		timeouts[action] += timeout;
+	};
+
 	exports.add_keys = function(obj) {
 		//Accepts keys in form of an object literal
 		//i.e. { action_name: [KEY_NAME1, KEY_NAME2] }

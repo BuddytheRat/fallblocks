@@ -12,19 +12,24 @@ var mainState = {
 		BlockManager.init();
 
 		this.block = BlockManager.new_block();
-		this.block.new_pos(3, 3);
+		this.block.new_pos(3, 16);
 
 		//this.tblock = BlockManager.new_block(blocks.t.shape);
 		//this.tblock.create_block();
 		//this.tblock.new_pos(2, 10);
 
+		this.place_block = function() {
+			Board.place_block(this.block.tile_coords());
+			this.block = BlockManager.new_block();
+			this.block.new_pos(3, -3);
+			Controller.set_timeout('drop', 10);
+		};
 
 		var gamestep = function () {
 			if (Board.unoccupied(this.block.tile_coords(), [0, 1])) {
 				this.block.move(0, 1);
 			} else {
-				this.block = BlockManager.new_block();
-				this.block.new_pos(3, -4);
+				this.place_block();
 			}
 		};
 		var timer = game.time.events.loop(Phaser.Timer.SECOND, gamestep, this);
@@ -34,11 +39,51 @@ var mainState = {
 	update: function() {
 		//60 fps
 		//game logic here
+
+		//BLOCK CONTROL//
 		if (Controller.key_down('rotate_cw', 10)) {
-			if (this.block.tile_coords(1))
-			this.block.rotate_cw(); 
+			this.block.rotate_cw();
+			// Rotate, then check for collisions,
+			// including adjacent placements up to 2 away. 
+			if (Board.occupied(this.block.tile_coords())) {
+				if (Board.unoccupied(this.block.tile_coords(), [-1, 0])) {
+					this.block.move(-1, 0);
+				} else if (Board.unoccupied(this.block.tile_coords(), [1, 0])) {
+					this.block.move(1, 0);	
+				} else if (Board.unoccupied(this.block.tile_coords(), [-2, 0])) {
+					this.block.move(-2, 0);	
+				} else if (Board.unoccupied(this.block.tile_coords(), [2, 0])) {
+					this.block.move(2, 0);	
+				} else {
+					this.block.rotate_ccw();
+				}
+			}
 		}
-		if (Controller.key_down('rotate_ccw', 10)) { this.block.rotate_ccw(); }
+		if (Controller.key_down('rotate_ccw', 10)) {
+			this.block.rotate_cw();
+			// Rotate, then check for collisions,
+			// including adjacent placements up to 2 away. 
+			if (Board.occupied(this.block.tile_coords())) {
+				if (Board.unoccupied(this.block.tile_coords(), [-1, 0])) {
+					this.block.move(-1, 0);
+				} else if (Board.unoccupied(this.block.tile_coords(), [1, 0])) {
+					this.block.move(1, 0);	
+				} else if (Board.unoccupied(this.block.tile_coords(), [-2, 0])) {
+					this.block.move(-2, 0);	
+				} else if (Board.unoccupied(this.block.tile_coords(), [2, 0])) {
+					this.block.move(2, 0);	
+				} else {
+					this.block.rotate_cw();
+				}
+			}
+		}
+
+		if (Controller.key_down('drop', 20)) {
+			while (Board.unoccupied(this.block.tile_coords(), [0, 1])) {
+				this.block.move(0, 1);
+			}
+			this.place_block();
+		}
 		if (Controller.key_down('left', 5)) {
 			if (Board.unoccupied(this.block.tile_coords(), [-1, 0])) { this.block.move(-1, 0); }
 		}

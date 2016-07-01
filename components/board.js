@@ -18,10 +18,12 @@ var Board = (function () {
 		for (var xy in tiles) {
 			tiles[xy][0] += offset[0];
 			tiles[xy][1] += offset[1];
-			if (tiles[xy][1] > BOARD_TILE_HEIGHT) { //Floor
+			if (tiles[xy][1] > BOARD_TILE_HEIGHT - 1) { //Floor
 				return true;
 			} else if (tiles[xy][0] < 0 || tiles[xy][0] > BOARD_TILE_WIDTH - 1) { //Walls
 				return true;
+			} else if (tiles[xy][1] < 0) {
+				//do nothing. block is in spawn area.
 			} else if (board_matrix[tiles[xy][1]][tiles[xy][0]] == 1) { //Blocks
 				return true;
 			}
