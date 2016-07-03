@@ -1,15 +1,15 @@
 var Tile = function(x, y, color) {
-	this.color = color;
+	this.color = hex_to_rgb(color);
 	this.x = x;
 	this.y = y;
 	this.canvas = new Phaser.BitmapData(game, 'tile', TILE_WIDTH, TILE_HEIGHT);
+	this.canvas.fill(this.color[0], this.color[1], this.color[2]);
 	this.sprite = game.add.sprite(
 		this.tile_pos_x(this.x),
 		this.tile_pos_y(this.y), 
 		this.canvas
 	);
 	
-	this.canvas.fill(color);
 };
 
 Tile.prototype.tile_pos_x = function(x) {

@@ -17,6 +17,10 @@ var BlockManager = (function () {
 		return blocks[0];
 	};
 
+	exports.drop_lines = function(y) {
+		
+	};
+
 	//Private//
 	var blocks = [];
 	var block_pool = [];
