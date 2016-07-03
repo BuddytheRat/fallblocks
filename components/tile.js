@@ -3,9 +3,13 @@ var Tile = function(x, y, color) {
 	this.x = x;
 	this.y = y;
 	this.canvas = new Phaser.BitmapData(game, 'tile', TILE_WIDTH, TILE_HEIGHT);
-	this.sprite = game.add.sprite(tile_pos_x(this.x), tile_pos_y(this.y), this.canvas)
+	this.sprite = game.add.sprite(
+		this.tile_pos_x(this.x),
+		this.tile_pos_y(this.y), 
+		this.canvas
+	);
 	
-	canvasBlock.fill(color);
+	this.canvas.fill(color);
 };
 
 Tile.prototype.tile_pos_x = function(x) {
@@ -20,10 +24,17 @@ Tile.prototype.tile_pos_y = function(y) {
 Tile.prototype.move = function(x, y) {
 	this.x += x;
 	this.y += y;
-	this.sprite.x = tile_pos_x(this.x);
-	this.sprite.y = tile_pos_x(this.y);
+	this.sprite.x = this.tile_pos_x(this.x);
+	this.sprite.y = this.tile_pos_x(this.y);
 };
+
+Tile.prototype.set_pos = function(x, y, rx, ry) {
+	this.x = x;
+	this.y = y;
+	this.sprite.x = this.tile_pos_x(this.x);
+	this.sprite.y = this.tile_pos_x(this.y);
+}
 
 Tile.prototype.kill = function() {
 	this.sprite.destroy();
-}
+};

@@ -5,32 +5,25 @@ var mainState = {
 
 	create: function() {
 		//setup game, display starting sprites, etc.
-		game.stage.backgroundColor = "#667";
-
+		game.stage.backgroundColor = "#667"
+;
 		Controller.init();
 		Board.init();
 		BlockManager.init();
 
-		this.block = BlockManager.new_block();
-		this.block.new_pos(3, 16);
-
-		//this.tblock = BlockManager.new_block(blocks.t.shape);
-		//this.tblock.create_block();
-		//this.tblock.new_pos(2, 10);
+		this.block = BlockManager.new_block(0, -3);
 
 		this.place_block = function() {
 			Board.place_block(this.block.tile_coords());
 			//Clear lines if filled.
 			var cleared = Board.check_lines();
-			console.log(cleared);
 			if (cleared.length > 0) {
 				for (var line in cleared) {
 					Board.clear_line(cleared[line]);
-					BlockManager.drop_tiles(line);
+					BlockManager.drop_lines(line);
 				}
 			}
-			this.block = BlockManager.new_block();
-			this.block.new_pos(3, -3);
+			this.block = BlockManager.new_block(3, -3);
 			Controller.set_timeout('drop', 10);
 		};
 
