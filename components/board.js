@@ -44,7 +44,8 @@ var Board = (function () {
 		var filled = [];
 		for (var y = 0; y < BOARD_TILE_HEIGHT; y++) {
 			if (board_matrix[y].indexOf(0) == -1) {
-				filled.unshift(y);
+				filled.push(y);
+				console.log(y);
 			}
 		}
 		return filled;

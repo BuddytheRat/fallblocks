@@ -16,15 +16,17 @@ var mainState = {
 		this.place_block = function() {
 			Board.place_block(this.block.tile_coords());
 			//Clear lines if filled.
-			var cleared = Board.check_lines();
-			if (cleared.length > 0) {
-				for (var line in cleared) {
-					Board.clear_line(cleared[line]);
+			var lines = Board.check_lines();
+			console.log(lines);
+			if (lines.length > 0) {
+				lines.forEach(function clear_line(line) {
+					Board.clear_line(line);
+					BlockManager.remove_tiles(line);
 					BlockManager.drop_lines(line);
-				}
+				});
 			}
 			this.block = BlockManager.new_block(3, -3);
-			Controller.set_timeout('drop', 10);
+			Controller.set_timeout('drop', 5);
 		};
 
 		var gamestep = function () {

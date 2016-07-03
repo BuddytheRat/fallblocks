@@ -18,7 +18,19 @@ var BlockManager = (function () {
 	};
 
 	exports.drop_lines = function(y) {
-		
+		each_tile(function move_down(tile) {
+			if (tile.y < y) {
+				tile.move(0, 1);
+			}
+		});
+	};
+
+	exports.remove_tiles = function(y) {
+		each_tile(function destroy_tile(tile) {
+			if (tile.y == y) {
+				tile.kill();
+			}
+		});
 	};
 
 	//Private//
@@ -40,6 +52,14 @@ var BlockManager = (function () {
 		var rand = Math.floor(Math.random() * block_pool.length - 1);
 		return block_pool.splice(rand, 1)[0];
 	};
+
+	var each_tile = function(fn) {
+		blocks.forEach(function get_tiles(block) {
+			block.tiles.forEach(function drop_tiles(tile) {
+				fn(tile)
+			});
+		});
+	}
 
 	return exports;
 }());
