@@ -20,14 +20,25 @@ var mainState = {
 
 		this.place_block = function() {
 			Board.place_block(this.block.tile_coords());
+			//Clear lines if filled.
+			var cleared = Board.check_lines();
+			console.log(cleared);
+			if (cleared.length > 0) {
+				for (var line in cleared) {
+					Board.clear_line(cleared[line]);
+					BlockManager.drop_tiles(line);
+				}
+			}
 			this.block = BlockManager.new_block();
 			this.block.new_pos(3, -3);
 			Controller.set_timeout('drop', 10);
 		};
 
 		var gamestep = function () {
+			//Move Down
 			if (Board.unoccupied(this.block.tile_coords(), [0, 1])) {
 				this.block.move(0, 1);
+			//Place Block
 			} else {
 				this.place_block();
 			}
@@ -39,6 +50,11 @@ var mainState = {
 	update: function() {
 		//60 fps
 		//game logic here
+
+		//DEBUG//
+		if(Controller.key_down('debug')) {
+			Board.matrix_debug();
+		}
 
 		//BLOCK CONTROL//
 		if (Controller.key_down('rotate_cw', 10)) {

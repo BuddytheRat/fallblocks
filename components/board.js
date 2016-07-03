@@ -40,23 +40,42 @@ var Board = (function () {
 		}
 	}
 
-	exports.clear_lines = function(y, num) {
-		// y is top most row to clear,
-		// num is number of rows.
-		board_matrix.splice[y, num];
-		for (var i = 0; i < num; i++) {
-			board_matrix.unshift(new Array(this.BOARD_WIDTH));
+	exports.check_lines = function() {
+		var filled = [];
+		for (var y = 0; y < BOARD_TILE_HEIGHT; y++) {
+			if (board_matrix[y].indexOf(0) == -1) {
+				filled.unshift(y);
+			}
 		}
+		return filled;
+	}
+
+	exports.clear_line = function(y) {
+		// y is row to clear,
+		board_matrix.splice(y, 1);
+		new_line();
 	};
 
+	exports.matrix_debug = function () {
+		console.log(board_matrix);
+	}
+
 	//Private//
+	
 
 	var board_matrix = [];
 
+	var new_line = function() {
+		board_matrix.unshift(new Array(BOARD_TILE_WIDTH));
+		for (var x = 0; x < BOARD_TILE_WIDTH; x++) {
+			board_matrix[0][x] = 0;
+		}
+	}
+
 	var new_matrix = function () {
-		board_matrix = new Array(BOARD_TILE_HEIGHT);
+		board_matrix = new Array();
 		for (var y = 0; y < BOARD_TILE_HEIGHT; y++) {
-			board_matrix[y] = new Array(BOARD_TILE_WIDTH);
+			new_line();
 		}
 	};
 
