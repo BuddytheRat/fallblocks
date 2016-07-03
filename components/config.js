@@ -13,7 +13,8 @@ var TILE_WIDTH        = 16,
 		'drop'      : ['SPACE', 'C'],
 		'left'      : ['LEFT', 'A'],
 		'right'     : ['RIGHT', 'D'],
-		'debug'     : ['N']
+		'debug'     : ['N'],
+		'hax'       : ['H']
 	},
 	BLOCKS = {
 		i: { shape: [0x0F00, 0x2222, 0x00F0, 0x4444], color: '0099ee' }, 

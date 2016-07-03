@@ -2,7 +2,8 @@ var Block = function(x, y, shape, color) {
 	this.shape = shape;
 	this.dir = 0;
 	this.color = color;
-	this.x = this.y = 0;
+	this.x = x;
+	this.y = y;
 	this.tiles = [];
 
 	//create tiles

@@ -11,13 +11,12 @@ var mainState = {
 		Board.init();
 		BlockManager.init();
 
-		this.block = BlockManager.new_block(0, -3);
+		this.block = BlockManager.new_block(3, -3);
 
 		this.place_block = function() {
 			Board.place_block(this.block.tile_coords());
 			//Clear lines if filled.
 			var lines = Board.check_lines();
-			console.log(lines);
 			if (lines.length > 0) {
 				lines.forEach(function clear_line(line) {
 					Board.clear_line(line);
