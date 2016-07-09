@@ -1,4 +1,4 @@
-var Board = (function () {
+Board = function (game) {
 
 	var exports = {};
 	
@@ -79,7 +79,7 @@ var Board = (function () {
 	};
 
 	var draw_grid = function () {
-		var color = "#99d";
+		var color = "#99b";
 
 		for (var i = 1; i <= BOARD_TILE_WIDTH - 1; i++) {
 			var line = new Phaser.Line(
@@ -104,4 +104,4 @@ var Board = (function () {
 
 	return exports;
 
-}());
+};

@@ -7,7 +7,7 @@ BasicGame = {
     music: null,
 
     /* Your game can check BasicGame.orientated in internal loops to know if it should pause or not */
-    orientated: false
+    orientated: false,
 
 };
 
@@ -21,13 +21,13 @@ BasicGame.Boot.prototype = {
         this.input.maxPointers = 1;
         this.stage.disableVisibilityChange = true;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.scale.setMinMax(480, 260, 1024, 768);
+        //this.scale.setMinMax(480, 260, 1024, 768);
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
 
         if (!this.game.device.desktop)
         {
-            this.scale.forceOrientation(true, false);
+            this.scale.forceOrientation(false, true);
             this.scale.setResizeCallback(this.gameResized, this);
             this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
             this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
@@ -38,8 +38,8 @@ BasicGame.Boot.prototype = {
     preload: function () {
 
         //  Here we load the assets required for our preloader (in this case a background and a loading bar)
-        this.load.image('preloaderBackground', 'images/preloader_background.jpg');
-        this.load.image('preloaderBar', 'images/preloader_bar.png');
+        //this.load.image('preloaderBackground', 'images/preloader_background.jpg');
+        //this.load.image('preloaderBar', 'images/preloader_bar.png');
 
     },
 
