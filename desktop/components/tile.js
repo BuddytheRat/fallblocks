@@ -13,7 +13,7 @@ var Tile = function(x, y, color) {
 };
 
 Tile.prototype.tile_pos_x = function(x) {
-	return x * TILE_WIDTH + BOARD_OFFSET_X;
+	return (x * TILE_WIDTH * GAME_SCALE) + BOARD_OFFSET_X;
 };
 
 Tile.prototype.tile_pos_y = function(y) {

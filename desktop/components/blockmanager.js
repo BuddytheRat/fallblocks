@@ -25,6 +25,12 @@ var BlockManager = (function () {
 		});
 	};
 
+	exports.scale_tiles = function() {
+		each_tile(function scale(tile) {
+			tile.sprite.scale.setTo(GAME_SCALE, GAME_SCALE);
+		});
+	};
+
 	exports.remove_tiles = function(y) {
 		each_tile(function destroy_tile(tile) {
 			if (tile.y == y) {

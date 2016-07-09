@@ -83,9 +83,9 @@ var Board = (function () {
 
 		for (var i = 1; i <= BOARD_TILE_WIDTH - 1; i++) {
 			var line = new Phaser.Line(
-				BOARD_OFFSET_X + (TILE_WIDTH * i),
+				BOARD_OFFSET_X + (TILE_WIDTH * i * GAME_SCALE),
 				BOARD_OFFSET_Y,
-				BOARD_OFFSET_X + (TILE_WIDTH * i),
+				BOARD_OFFSET_X + (TILE_WIDTH * i * GAME_SCALE),
 				BOARD_OFFSET_Y + BOARD_HEIGHT
 			);
 			game.debug.geom(line, color);
@@ -93,9 +93,9 @@ var Board = (function () {
 		for (var i = 1; i <= BOARD_TILE_HEIGHT - 1; i++) {
 			var line = new Phaser.Line(
 				BOARD_OFFSET_X,
-				BOARD_OFFSET_Y + (TILE_HEIGHT * i),
+				BOARD_OFFSET_Y + (TILE_HEIGHT * i * GAME_SCALE),
 				BOARD_OFFSET_X + BOARD_WIDTH,
-				BOARD_OFFSET_Y + (TILE_HEIGHT * i)
+				BOARD_OFFSET_Y + (TILE_HEIGHT * i * GAME_SCALE)
 			);
 			game.debug.geom(line, color);
 		}

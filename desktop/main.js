@@ -1,7 +1,8 @@
 var mainState = {
 	preload: function() {
-		//load images and sounds
+		//set game scaling
 		game.stage.smoothed = false;
+		//load images and sounds
 		game.load.image('dioramabg', 'img/craptree.png');
 		game.load.spritesheet('leaf', 'img/leaves.png', 6, 5);
 	},
@@ -104,6 +105,10 @@ var mainState = {
 		if (Controller.key_down('right', 5)) {
 			if (Board.unoccupied(this.block.tile_coords(), [1, 0])) { this.block.move(1, 0); }
 		}
+	},
+
+	render: function() {
+		BlockManager.scale_tiles();
 	},
 };
 

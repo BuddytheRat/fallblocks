@@ -20,7 +20,7 @@ var Diorama = (function () {
 
 	var add_sprite = function(x, y, key) {
 		var sprite = game.add.sprite(x, y, key);
-		sprite.scale.setTo(scale_x, scale_y);
+		sprite.scale.setTo(GAME_SCALE, GAME_SCALE);
 		return sprite;
 	}
 
