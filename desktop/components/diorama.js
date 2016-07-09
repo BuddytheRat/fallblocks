@@ -10,7 +10,7 @@ var Diorama = (function () {
 			'dioramabg'
 		);
 
-		add_sprite(corner_x, corner_y, 'leaf');
+		spawn_leaves();
 	};
 
 	//Private//
@@ -25,7 +25,19 @@ var Diorama = (function () {
 	}
 
 	var spawn_leaves = function() {
-
+		for (var x = 0; x < 40; x++) {
+			for (var y = 0; y < 60; y++) {
+				if (Math.random() > .7) {
+					rand_x = Math.floor(Math.random() * 58 * GAME_SCALE);
+					var spawned_sprite = add_sprite(
+						corner_x + (rand_x), 
+						corner_y + (y * GAME_SCALE), 
+						'leaf'
+					);
+					spawned_sprite.frame = Math.floor(Math.random() * 25);
+				}
+			}
+		}
 	}
 
 	return exports;
