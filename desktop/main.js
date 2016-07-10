@@ -1,17 +1,13 @@
 var mainState = {
 	preload: function() {
-		//set game scaling
-		game.stage.smoothed = false;
-		//load images and sounds
-		game.load.image('dioramabg', 'img/craptree.png');
-		game.load.spritesheet('leaf', 'img/leaves.png', 6, 5);
+
 	},
 
 	create: function() {
 		//setup game, display starting sprites, etc.
 		game.stage.backgroundColor = "#667"
 
-		Diorama.init();
+
 		Controller.init();
 		Board.init();
 		BlockManager.init();
@@ -115,6 +111,7 @@ var mainState = {
 // Initialize Phaser
 var game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, 'game');
 // Add 'mainState' and call it 'main'
+game.state.add('boot', bootState);
 game.state.add('main', mainState);
 // Start the state. (Start the game.)
-game.state.start('main');
+game.state.start('boot');

@@ -3,41 +3,61 @@ var Diorama = (function () {
 	var exports = {};
 
 	//Public//
-	exports.init = function() {
-		Diorama.bg = add_sprite(
+	exports.init = function(shader) {
+		Diorama.bg = game.add.sprite(
 			corner_x,
 			corner_y,
 			'dioramabg'
 		);
 
+		Diorama.bg.scale.setTo(GAME_SCALE, GAME_SCALE);
+
 		spawn_leaves();
 	};
 
 	//Private//
+	//top left corner of diorama
 	var corner_x = BOARD_WIDTH + (BOARD_OFFSET_X * 2);
 	var corner_y = BOARD_OFFSET_Y;
-	var scale_x = scale_y = 3;
-
-	var add_sprite = function(x, y, key) {
-		var sprite = game.add.sprite(x, y, key);
-		sprite.scale.setTo(GAME_SCALE, GAME_SCALE);
-		return sprite;
-	}
 
 	var spawn_leaves = function() {
-		for (var x = 0; x < 40; x++) {
-			for (var y = 0; y < 60; y++) {
-				if (Math.random() > .7) {
-					rand_x = Math.floor(Math.random() * 58 * GAME_SCALE);
-					var spawned_sprite = add_sprite(
-						corner_x + (rand_x), 
-						corner_y + (y * GAME_SCALE), 
-						'leaf'
+		shader_sprite = game.add.sprite(0, 0, 'treeshader');
+		var shader = new Phaser.BitmapData(
+			game, 
+			'bitmapshader',
+			shader_sprite.width,
+			shader_sprite.height
+		);
+		shader.draw(shader_sprite).update();
+
+		for (var x = 0; x < shader.width; x++) {
+			for (var y = 0; y < shader.height; y++) {
+				var rate = 0; //modifies average number of leaves
+				var red = shader.context.getImageData(
+					x, 
+					y, 
+					shader.width, 
+					shader.height
+				).data[0];
+				var alpha = shader.context.getImageData(
+					x, 
+					y, 
+					shader.width, 
+					shader.height
+				).data[3];
+
+				if ((Math.floor(Math.random() * 255) > red - rate) && alpha == 255) {
+					//add leaf
+					new Leaf(
+						(x * GAME_SCALE) + corner_x,
+						(y * GAME_SCALE) + corner_y,
+						red
 					);
-					spawned_sprite.frame = Math.floor(Math.random() * 25);
 				}
 			}
 		}
+
+		shader_sprite.destroy();
 	}
 
 	return exports;
