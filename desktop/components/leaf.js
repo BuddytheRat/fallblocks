@@ -4,3 +4,7 @@ var Leaf = function(x, y, lifetime) {
 	this.sprite.frame = Math.floor(Math.random() * 25);
 	this.lifetime = lifetime;
 };
+
+Leaf.prototype.fall = function() {
+	this.sprite.destroy();
+}
