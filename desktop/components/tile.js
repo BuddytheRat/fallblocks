@@ -17,7 +17,7 @@ Tile.prototype.tile_pos_x = function(x) {
 };
 
 Tile.prototype.tile_pos_y = function(y) {
-	return y * TILE_HEIGHT + BOARD_OFFSET_Y;
+	return (y * TILE_HEIGHT * GAME_SCALE) + BOARD_OFFSET_Y;
 };
 
 //Move relative to current position.
