@@ -1,8 +1,6 @@
 var mainState = {
 	preload: function() {
-		//set game scaling
 		game.stage.smoothed = false;
-		//load images and sounds
 		game.load.image('dioramabg', 'img/craptree.png');
 		game.load.image('treeshader', 'img/tree_shader.png');
 		game.load.spritesheet('leaf', 'img/leaves.png', 6, 5);
@@ -10,43 +8,61 @@ var mainState = {
 	},
 
 	create: function() {
-		//setup game, display starting sprites, etc.
 		game.stage.backgroundColor = "#667"
 
-		Diorama.init();
+		this.board = Object.create(Board);
+		this.board.setup(
+			game,
+			BOARD_OFFSET_X,
+			BOARD_OFFSET_Y,
+			BOARD_WIDTH,
+			BOARD_HEIGHT,
+			GAME_SCALE
+		);
+		
+		this.diorama = Object.create(Diorama);
+		Diorama.setup(
+			game,
+			(BOARD_WIDTH * GAME_SCALE) + BOARD_OFFSET_X * 2,
+			BOARD_OFFSET_Y,
+			DIORAMA_WIDTH,
+			DIORAMA_HEIGHT,
+			GAME_SCALE
+		);
 		Controller.init();
-		Board.init();
 		BlockManager.init();
 
-		var music = game.add.audio('piano');
-		music.play();
+		//var music = game.add.audio('piano');
+		//music.play();
 
-		this.block = BlockManager.new_block(3, -3);
+		this.block = BlockManager.new_block(3, 14);
+
+		this.clear_line = function (line) {
+			this.board.clear_line(line);
+			BlockManager.remove_tiles(line);
+			BlockManager.drop_lines(line);
+		};
 
 		this.place_block = function() {
-			Board.place_block(this.block.tile_coords());
-			//Clear lines if filled.
-			var lines = Board.check_lines();
+			this.board.place_block(this.block.tile_coords());
+
+			var lines = this.board.check_lines();
 			if (lines.length > 0) {
-				lines.forEach(function clear_line(line) {
-					Board.clear_line(line);
-					BlockManager.remove_tiles(line);
-					BlockManager.drop_lines(line);
-				});
+				lines.forEach(this.clear_line, this);
 			}
 			this.block = BlockManager.new_block(3, -3);
 			Controller.set_timeout('drop', 5);
 		};
 
 		var gamestep = function () {
-			var lifetime = Math.floor((((music.currentTime / 1000) * 255) / music.totalDuration));
-			Diorama.leaf_fall(lifetime);
+			//var lifetime = Math.floor((((music.currentTime / 1000) * 255) / music.totalDuration));
+			//Diorama.leaf_fall(lifetime);
 			//Move Down
-			if (Board.unoccupied(this.block.tile_coords(), [0, 1])) {
+			if (this.board.unoccupied(this.block.tile_coords(), [0, 1])) {
 				this.block.move(0, 1);
 			//Place Block
 			} else {
-				this.place_block();
+				this.place_block.call(this);
 			}
 		};
 		var timer = game.time.events.loop(600, gamestep, this);
@@ -59,7 +75,7 @@ var mainState = {
 
 		//DEBUG//
 		if(Controller.key_down('debug')) {
-			Board.matrix_debug();
+			this.board.matrix_debug();
 		}
 
 		//BLOCK CONTROL//
@@ -67,14 +83,14 @@ var mainState = {
 			this.block.rotate_cw();
 			// Rotate, then check for collisions,
 			// including adjacent placements up to 2 away. 
-			if (Board.occupied(this.block.tile_coords())) {
-				if (Board.unoccupied(this.block.tile_coords(), [-1, 0])) {
+			if (this.board.occupied(this.block.tile_coords())) {
+				if (this.board.unoccupied(this.block.tile_coords(), [-1, 0])) {
 					this.block.move(-1, 0);
-				} else if (Board.unoccupied(this.block.tile_coords(), [1, 0])) {
+				} else if (this.board.unoccupied(this.block.tile_coords(), [1, 0])) {
 					this.block.move(1, 0);	
-				} else if (Board.unoccupied(this.block.tile_coords(), [-2, 0])) {
+				} else if (this.board.unoccupied(this.block.tile_coords(), [-2, 0])) {
 					this.block.move(-2, 0);	
-				} else if (Board.unoccupied(this.block.tile_coords(), [2, 0])) {
+				} else if (this.board.unoccupied(this.block.tile_coords(), [2, 0])) {
 					this.block.move(2, 0);	
 				} else {
 					this.block.rotate_ccw();
@@ -85,14 +101,14 @@ var mainState = {
 			this.block.rotate_cw();
 			// Rotate, then check for collisions,
 			// including adjacent placements up to 2 away. 
-			if (Board.occupied(this.block.tile_coords())) {
-				if (Board.unoccupied(this.block.tile_coords(), [-1, 0])) {
+			if (this.board.occupied(this.block.tile_coords())) {
+				if (this.board.unoccupied(this.block.tile_coords(), [-1, 0])) {
 					this.block.move(-1, 0);
-				} else if (Board.unoccupied(this.block.tile_coords(), [1, 0])) {
+				} else if (this.board.unoccupied(this.block.tile_coords(), [1, 0])) {
 					this.block.move(1, 0);	
-				} else if (Board.unoccupied(this.block.tile_coords(), [-2, 0])) {
+				} else if (this.board.unoccupied(this.block.tile_coords(), [-2, 0])) {
 					this.block.move(-2, 0);	
-				} else if (Board.unoccupied(this.block.tile_coords(), [2, 0])) {
+				} else if (this.board.unoccupied(this.block.tile_coords(), [2, 0])) {
 					this.block.move(2, 0);	
 				} else {
 					this.block.rotate_cw();
@@ -101,16 +117,16 @@ var mainState = {
 		}
 
 		if (Controller.key_down('drop', 20)) {
-			while (Board.unoccupied(this.block.tile_coords(), [0, 1])) {
+			while (this.board.unoccupied(this.block.tile_coords(), [0, 1])) {
 				this.block.move(0, 1);
 			}
 			this.place_block();
 		}
 		if (Controller.key_down('left', 5)) {
-			if (Board.unoccupied(this.block.tile_coords(), [-1, 0])) { this.block.move(-1, 0); }
+			if (this.board.unoccupied(this.block.tile_coords(), [-1, 0])) { this.block.move(-1, 0); }
 		}
 		if (Controller.key_down('right', 5)) {
-			if (Board.unoccupied(this.block.tile_coords(), [1, 0])) { this.block.move(1, 0); }
+			if (this.board.unoccupied(this.block.tile_coords(), [1, 0])) { this.block.move(1, 0); }
 		}
 	},
 

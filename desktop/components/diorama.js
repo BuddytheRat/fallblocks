@@ -1,42 +1,32 @@
-var Diorama = (function () {
-	
-	var exports = {};
+var Diorama = { //Delegates to GameWindow
 
-	//Public//
-	exports.init = function(shader) {
-		Diorama.bg = game.add.sprite(
-			corner_x,
-			corner_y,
-			'dioramabg'
+	setup: function (game, x, y, width, height, scale = 1) {
+		this.init(game, x, y, width, height, scale);
+		this.background = this.add_sprite(
+			0, 0, 'dioramabg'
 		);
-		Diorama.bg.scale.setTo(GAME_SCALE, GAME_SCALE);
 
-		spawn_leaves();
-	};
+		this.leaves = [];
+		this._spawn_leaves(-40, 50);
+	},
 
-	exports.leaf_fall = function(lifetime) {
-		each_leaf(function check_for_falling(leaf) {
+	leaf_fall: function(lifetime) {
+		_each_leaf(function check_for_falling(leaf) {
 			if (leaf.lifetime < lifetime) {
 				leaf.fall();
 			}
 		});
 		leaves[Math.floor(Math.random() * leaves.length)].fall();
-	};
+	},
 
-	//Private//
-	//top left corner of diorama
-	var corner_x = BOARD_WIDTH + (BOARD_OFFSET_X * 2);
-	var corner_y = BOARD_OFFSET_Y;
-	var leaves = [];
-
-	var each_leaf = function(fn) {
+	_each_leaf: function(fn) {
 		leaves.forEach(function (leaf) {
 			fn(leaf);
 		});
-	}
+	},
 
-	var spawn_leaves = function() {
-		shader_sprite = game.add.sprite(0, 0, 'treeshader');
+	_spawn_leaves: function(leaf_rate, leaf_weight) {
+		shader_sprite = this.game.add.sprite(0, 0, 'treeshader');
 		var shader = new Phaser.BitmapData(
 			game, 
 			'bitmapshader',
@@ -51,16 +41,16 @@ var Diorama = (function () {
 				var h = shader.height;
 				
 				
-				var rate = -40; //modifies average number of leaves
-				var weight = 50;
+				var rate = leaf_rate; //modifies average number of leaves
+				var weight = leaf_weight; //modifies lifespan of each leaf
 				var color = shader.context.getImageData(x, y, w, h).data[0];
 				var alpha = shader.context.getImageData(x, y, w, h).data[3];
 				if (alpha == 255) {
 					if (Math.floor(Math.random() * 255) > color - rate) {
 						//add leaf
-						leaves.push(new Leaf(
-							(x * GAME_SCALE) + corner_x,
-							(y * GAME_SCALE) + corner_y,
+						this.leaves.push(new Leaf(
+							(x * GAME_SCALE) + this.x,
+							(y * GAME_SCALE) + this.y,
 							Math.min(color + weight, 255)
 						));
 					}
@@ -69,10 +59,7 @@ var Diorama = (function () {
 		}
 
 		shader_sprite.destroy();
-	};
+	},
+};
 
-
-
-	return exports;
-
-})();
+Object.setPrototypeOf(Diorama, ScreenArea);
